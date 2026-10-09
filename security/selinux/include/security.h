@@ -141,15 +141,23 @@ static inline void selinux_mark_initialized(struct selinux_state *state)
 }
 
 #ifdef CONFIG_SECURITY_SELINUX_DEVELOP
+/*
+ * The enforcing mode lives on a page of its own. Once enforcing is on, the
+ * page is made read-only and enforcing cannot be turned off again.
+ */
+extern bool *selinux_enforcing;
+
 static inline bool enforcing_enabled(struct selinux_state *state)
 {
-	return READ_ONCE(state->enforcing);
+	return READ_ONCE(*selinux_enforcing);
 }
 
 static inline void enforcing_set(struct selinux_state *state, bool value)
 {
-	WRITE_ONCE(state->enforcing, value);
+	WRITE_ONCE(*selinux_enforcing, value);
 }
+
+void selinux_enforcing_lock(void);
 #else
 static inline bool enforcing_enabled(struct selinux_state *state)
 {
