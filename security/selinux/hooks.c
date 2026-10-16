@@ -118,7 +118,7 @@ static int selinux_enforcing_boot __initdata;
 bool *selinux_enforcing __ro_after_init = &selinux_state.enforcing;
 
 /*
- * Make the enforcing mode read-only. Called once enforcing is on; after this
+ * Make the enforcing mode read-only. Called once enforcing is on. After this
  * neither sel_write_enforce() nor a stray kernel write can turn it off.
  */
 void selinux_enforcing_lock(void)
